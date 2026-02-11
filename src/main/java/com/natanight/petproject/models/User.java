@@ -3,8 +3,7 @@ package com.natanight.petproject.models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -14,20 +13,24 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(length = 50, nullable = false)
+    @Column(name = "username", length = 50, nullable = false)
     private String username;
 
-    @Column(nullable = false, length = 60)
+    @Column(name = "password", nullable = false, length = 60)
     private String password;
 
-    @Column(nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @CreationTimestamp
-    @Column
-    private Timestamp createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "is_admin", nullable = false)
+    private boolean isAdmin = false;
 
     public User() {
     }
@@ -74,11 +77,19 @@ public class User {
         this.email = email;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }

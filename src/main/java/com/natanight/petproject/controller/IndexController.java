@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class IndexController {
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public Message base() {
+        return new Message("Welcome to base page!");
+    }
+
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public Message index() {

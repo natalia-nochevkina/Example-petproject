@@ -11,12 +11,11 @@ import java.util.List;
 @Service
 public class UserService {
     @Autowired
-    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
-
-    public UserService(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public User addUser(

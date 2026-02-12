@@ -8,6 +8,9 @@ import com.natanight.petproject.models.User;
 import com.natanight.petproject.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +24,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse addUser(@RequestBody @Valid CreateUserRequest request) {
@@ -32,6 +36,7 @@ public class UserController {
         return UserResponse.fromEntity(user);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Message deleteUser(@PathVariable Long id) {
@@ -39,6 +44,7 @@ public class UserController {
         return new Message("deleted user with id = " + id.toString());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse updateUser(
@@ -85,8 +91,9 @@ public class UserController {
 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public User getLoggedUser() {
-        // TODO: later
-        return userService.getUserByUsername("nata");
+    public UserResponse getLoggedUser(@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        User user = userService.getUserByUsername(username);
+        return UserResponse.fromEntity(user);
     }
 }

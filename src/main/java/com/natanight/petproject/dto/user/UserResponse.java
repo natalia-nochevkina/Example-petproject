@@ -3,28 +3,29 @@ package com.natanight.petproject.dto.user;
 import com.natanight.petproject.models.User;
 
 public class UserResponse {
-    private Long id;
-    private String username;
-    private String email;
-
-    public UserResponse() {
-    }
+    private final Long id;
+    private final String username;
+    private final String email;
+    private final Boolean isAdmin;
 
     public UserResponse(
             Long id,
             String username,
-            String email
+            String email,
+            Boolean isAdmin
     ) {
         this.id = id;
         this.username = username;
         this.email = email;
+        this.isAdmin = isAdmin;
     }
 
     public static UserResponse fromEntity(User user) {
         return new UserResponse(
                 user.getId(),
                 user.getUsername(),
-                user.getEmail()
+                user.getEmail(),
+                user.isAdmin()
         );
     }
 
@@ -38,5 +39,9 @@ public class UserResponse {
 
     public String getEmail() {
         return email;
+    }
+
+    public Boolean getAdmin() {
+        return isAdmin;
     }
 }

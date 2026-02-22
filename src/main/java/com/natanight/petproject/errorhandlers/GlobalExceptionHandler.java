@@ -2,6 +2,8 @@ package com.natanight.petproject.errorhandlers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +12,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 @RestControllerAdvice
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class GlobalExceptionHandler extends BaseExceptionHandler {
     // 405
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ApiError> httpRequestMethodNotSupportedException(
-            NoHandlerFoundException ex,
+            HttpRequestMethodNotSupportedException ex,
             HttpServletRequest request
     ) {
         return errorBuild(ex.getMessage(), request, HttpStatus.METHOD_NOT_ALLOWED);
@@ -26,7 +28,7 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
     // 401 no auth
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiError> authenticationException(
-            AccessDeniedException ex,
+            AuthenticationException ex,
             HttpServletRequest request
     ) {
         String message = "You are not authorized: " + ex;
@@ -35,7 +37,7 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 
     // 403 forbidden
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiError> handleAccessDenied(
+    public ResponseEntity<ApiError> accessDeniedException(
             AccessDeniedException ex,
             HttpServletRequest request
     ) {

@@ -4,8 +4,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,15 @@ import java.util.List;
 @Slf4j
 @Service
 public class JwtService {
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Value("${jwt.secret}")
+    private String secret;
+
     private static final long EXPIRATION = 1000 * 60 * 60 * 6;
+
+    public Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 
     public String generateToken(UserDetails userDetails) {
         List<String> roles = userDetails.getAuthorities()
@@ -30,14 +39,14 @@ public class JwtService {
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
         log.info("Token for {} has been generated", userDetails.getUsername());
         return token;
     }
 
     public String extractUsername(String token) {
-        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build()
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -45,7 +54,7 @@ public class JwtService {
 
     public boolean isValidToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(SECRET_KEY).build()
+            Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
                     .parseClaimsJws(token);
             return true;
         } catch (JwtException e) {
@@ -66,7 +75,7 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

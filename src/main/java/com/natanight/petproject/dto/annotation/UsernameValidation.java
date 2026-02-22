@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
-@Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+@Size(min = 3, max = 25, message = "Username must be between 3 and 25 characters")
 // TODO: add validation rules
 public @interface UsernameValidation {
 

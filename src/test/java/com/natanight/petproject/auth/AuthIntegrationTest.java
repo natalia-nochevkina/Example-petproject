@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// TODO: add token-checking tests
+
 @Sql("/auth/auth-test-data.sql")
 @Transactional
 class AuthIntegrationTest extends IntegrationTestBase {

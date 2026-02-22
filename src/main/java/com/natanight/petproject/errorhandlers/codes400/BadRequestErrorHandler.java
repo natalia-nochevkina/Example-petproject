@@ -3,7 +3,7 @@ package com.natanight.petproject.errorhandlers.codes400;
 import com.natanight.petproject.errorhandlers.ApiError;
 import com.natanight.petproject.errorhandlers.BaseExceptionHandler;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ValidationException;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,13 +18,14 @@ import tools.jackson.databind.exc.UnrecognizedPropertyException;
 
 // 400 Handler
 @RestControllerAdvice
+@Order(1)
 public class BadRequestErrorHandler extends BaseExceptionHandler {
     private final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
 
     // Validation
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> methodArgumentNotValidException(
-            ValidationException ex,
+            MethodArgumentNotValidException ex,
             HttpServletRequest request
     ) {
         return errorBuild(ex.getMessage(), request, STATUS);
@@ -33,7 +34,7 @@ public class BadRequestErrorHandler extends BaseExceptionHandler {
     // JSON errors
     @ExceptionHandler(UnrecognizedPropertyException.class)
     public ResponseEntity<ApiError> unrecognizedPropertyException(
-            ValidationException ex,
+            UnrecognizedPropertyException ex,
             HttpServletRequest request
     ) {
         return errorBuild(ex.getMessage(), request, STATUS);
@@ -42,7 +43,7 @@ public class BadRequestErrorHandler extends BaseExceptionHandler {
     // JSON not readable
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> httpMessageNotReadableException(
-            ValidationException ex,
+            HttpMessageNotReadableException ex,
             HttpServletRequest request
     ) {
         return errorBuild(ex.getMessage(), request, STATUS);

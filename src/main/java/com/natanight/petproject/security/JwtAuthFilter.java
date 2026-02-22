@@ -38,7 +38,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse res,
                                     @NonNull FilterChain chain)
             throws ServletException, IOException {
-
         String authHeader = req.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");

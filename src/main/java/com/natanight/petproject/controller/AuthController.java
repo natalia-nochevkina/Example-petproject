@@ -3,7 +3,7 @@ package com.natanight.petproject.controller;
 import com.natanight.petproject.dto.auth.AuthRequest;
 import com.natanight.petproject.dto.auth.AuthResponse;
 import com.natanight.petproject.service.JwtService;
-import org.jspecify.annotations.NonNull;
+import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody @NonNull AuthRequest request) {
+    public AuthResponse login(@Valid @RequestBody AuthRequest request) {
         Authentication auth = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),

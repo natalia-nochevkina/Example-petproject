@@ -12,9 +12,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
-// TODO: add validation rules
 @Size(min = 8, max = 50, message = "Password must be between 8 and 50 characters")
-
+// TODO: add validation rules
 public @interface PasswordValidation {
     String message() default "Invalid password";
 

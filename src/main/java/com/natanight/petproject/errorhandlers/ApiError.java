@@ -1,9 +1,11 @@
 package com.natanight.petproject.errorhandlers;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class ApiError {
 
     private final LocalDateTime timestamp = LocalDateTime.now();
@@ -17,25 +19,5 @@ public class ApiError {
         this.error = status.getReasonPhrase();
         this.message = message;
         this.path = path;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getPath() {
-        return path;
     }
 }

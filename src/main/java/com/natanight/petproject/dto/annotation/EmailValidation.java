@@ -14,7 +14,6 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {})
 @Size(min = 10, max = 255, message = "Email must be between 10 and 255 characters")
 // TODO: add validation rules
-
 public @interface EmailValidation {
     String message() default "Invalid email";
 
